@@ -9,7 +9,7 @@ export class UsersController {
   @Get()
   getUsers(@Query() query: any) {
     console.log(query);
-    return this.usersService.getUsers();
+    return this.usersService.getUsers(query);
   }
 
   @Get(':id')

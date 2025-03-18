@@ -1,4 +1,5 @@
 import { Body, Injectable, Param } from '@nestjs/common';
+import { filter } from 'rxjs';
 
 @Injectable()
 export class UsersService {
@@ -7,8 +8,27 @@ export class UsersService {
     { id: 2, name: 'Fatima', gender: 'female', isMarried: false },
   ];
 
-  getUsers() {
-    return this.users;
+  getUsers(query?: any) {
+    if (!query || Object.keys(query).length == 0) {
+      return this.users;
+    }
+
+    let filteredUsers = [...this.users];
+
+    if (query.gender) {
+      filteredUsers = filteredUsers.filter(
+        (user) => user.gender === query.gender,
+      );
+    }
+
+    if (query.isMarried !== undefined) {
+      const isMarriedBool = query.isMarried === 'true';
+      filteredUsers = filteredUsers.filter(
+        (user) => user.isMarried === isMarriedBool,
+      );
+    }
+
+    return filteredUsers;
   }
 
   getUserById(id: number) {
