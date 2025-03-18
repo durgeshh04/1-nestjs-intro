@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { Response } from 'express';
 import { UsersService } from './users.service';
 
@@ -7,7 +7,8 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get()
-  getUsers() {
+  getUsers(@Query() query: any) {
+    console.log(query);
     return this.usersService.getUsers();
   }
 
