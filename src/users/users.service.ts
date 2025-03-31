@@ -3,9 +3,27 @@ import { filter } from 'rxjs';
 
 @Injectable()
 export class UsersService {
-  users: { id: number; name: string; gender: string; isMarried: boolean }[] = [
-    { id: 1, name: 'Durgesh', gender: 'male', isMarried: false },
-    { id: 2, name: 'Fatima', gender: 'female', isMarried: false },
+  users: {
+    id: number;
+    name: string;
+    gender: string;
+    isMarried: boolean;
+    email: string;
+  }[] = [
+    {
+      id: 1,
+      name: 'Durgesh',
+      gender: 'male',
+      isMarried: false,
+      email: 'durgesh@example.com',
+    },
+    {
+      id: 2,
+      name: 'Fatima',
+      gender: 'female',
+      isMarried: false,
+      email: 'fatima@example.com',
+    },
   ];
 
   getUsers(query?: any) {
@@ -35,7 +53,19 @@ export class UsersService {
     return this.users.find((user) => user.id === id);
   }
 
-  createUser(user: { name: string; gender: string; isMarried: boolean }) {
+  createUser(user: {
+    name: string;
+    email: string;
+    gender: string;
+    isMarried: boolean;
+  }) {
+    const existedUser = this.users.find(
+      (exists) => exists.email === user.email,
+    );
+    if (existedUser) {
+      throw new Error('User with this email already exists');
+    }
+
     const newUser = {
       id: this.users.length + 1,
       ...user,

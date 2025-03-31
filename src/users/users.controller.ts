@@ -7,6 +7,7 @@ import {
   Query,
   ParseIntPipe,
   DefaultValuePipe,
+  ValidationPipe,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UsersService } from './users.service';
@@ -22,7 +23,7 @@ export class UsersController {
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
   ) {
-    return this.usersService.getUsers(query);
+    return this.usersService.getUsers({ ...query, limit, page });
   }
 
   @Get(':id')
@@ -31,7 +32,7 @@ export class UsersController {
   }
 
   @Post()
-  createUser(@Body() user: CreateUserDto) {
+  createUser(@Body(ValidationPipe) user: CreateUserDto) {
     return this.usersService.createUser(user);
   }
 }
